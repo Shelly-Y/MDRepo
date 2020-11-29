@@ -14,26 +14,26 @@
   </el-radio-group>
     </div >
    <div v-if="tabPosition=='按时'"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            >
-   <div style="padding-top: 4px" ><span class = "spans" style="padding-right: 10px" >选择开始时间</span ><span><input id="sdate1" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日HH时',readOnly:true})" /></span></div>
-   <div style="padding-top: 6px"><span class = "spans" style="padding-right: 10px">选择结束时间</span> <span ><input id="edate1" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日HH时',readOnly:true,minDate:'#F{$dp.$D(\'sdate1\')}'})" /></span></div>
+   <div style="padding-top: 4px" ><span class = "spans">选择开始时间</span ><span><input id="sdate3" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日HH时',readOnly:true})" /></span></div>
+   <div style="padding-top: 6px"><span class = "spans">选择结束时间</span><span ><input id="edate3" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日HH时',readOnly:true,minDate:'#F{$dp.$D(\'sdate3\')}'})" /></span></div>
  </div>
  <div v-if="tabPosition=='按日'" >
-   <div style="padding-top: 4px" ><span class = "spans" style="padding-right: 10px" >选择开始时间</span ><span ><input id="sdate2"  class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日',readOnly:true})" /></span></div>
-   <div style="padding-top: 6px"><span class = "spans" style="padding-right: 10px">选择结束时间</span> <span ><input id="edate2" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日',readOnly:true,minDate:'#F{$dp.$D(\'sdate2\')}'})" /></span></div>
+   <div style="padding-top: 4px" ><span class = "spans">选择开始时间</span ><span ><input id="sdate3"  class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日',readOnly:true})" /></span></div>
+   <div style="padding-top: 6px"><span class = "spans">选择结束时间</span><span ><input id="edate3" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日',readOnly:true,minDate:'#F{$dp.$D(\'sdate3\')}'})" /></span></div>
  </div>
  <div v-if="tabPosition=='按月'" >
-   <div style="padding-top: 4px" ><span class = "spans" style="padding-right: 10px" >选择开始时间</span ><span ><input id="sdate3"  class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月',readOnly:true})" /></span></div>
-   <div style="padding-top: 6px"><span class = "spans" style="padding-right: 10px">选择结束时间</span> <span><input id="edate3" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月',onpicked:function(){$dp.$('edate3_1').value=$dp.cal.getP('y年');},readOnly:true,minDate:'#F{$dp.$D(\'sdate3\')}'})" /></span></div>
+   <div style="padding-top: 4px" ><span class = "spans">选择开始时间</span ><span ><input id="sdate3"  class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月',readOnly:true})" /></span></div>
+   <div style="padding-top: 6px"><span class = "spans">选择结束时间</span><span><input id="edate3" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月',onpicked:function(){$dp.$('edate3_1').value=$dp.cal.getP('y年');},readOnly:true,minDate:'#F{$dp.$D(\'sdate3\')}'})" /></span></div>
  </div>
 
    <template>
   <el-radio v-model="radio" label="1">显示全部数据</el-radio>
-  <el-radio v-model="radio" label="2">仅显示呼叫失败数据</el-radio>e
+  <el-radio v-model="radio" label="2">仅显示呼叫失败数据</el-radio>
   </template>
    <div style="padding-top: 60px"> <el-button type="primary" @click="getEchartData()">分 析</el-button> <span style="padding-left: 15%"><el-button>重 置</el-button></span></div>
   </div>
   <div class = "column2"><el-divider id = "divider2" direction="vertical" ></el-divider></div>
-  <div class = "column7"><div ref="chart3" style="width: 1000px;height: 280px"></div></div>
+  <div class = "column7"><div ref="chart3" style="width: 1100px;height: 280px"></div></div>
 
   </el-collapse-item>
   </el-collapse>
@@ -143,8 +143,18 @@ var echarts = require('echarts');
 
   axios.get('../../static/month.json').then((res) => {
 console.log(res.data.name);
+let time = "";
+console.log(this.tabPosition);
+if(this.tabPosition=='按时'){
+  time="时间/时"
+}else if(this.tabPosition=='按日'){
+  time = "时间/日"
+}else if(this.tabPosition=='按月'){
+  time = "时间/月"
+}
       myChart3.setOption({
         				xAxis:{
+          name:time,
 					data:res.data.name,
 				},
 				series:{
@@ -203,7 +213,7 @@ title:{
 .el-radio {
     color: #606266;
     cursor: pointer;
-   margin-right: 7%;
+   margin-right: 10%;
    margin-top: 10%;
 }
 

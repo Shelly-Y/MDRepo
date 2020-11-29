@@ -245,7 +245,7 @@ mounted() {
 }
 .column1 {
   float: left;
-  width: 20%;
+  width: 18%;
   padding-bottom:1.5%
 }
 .column2 {
