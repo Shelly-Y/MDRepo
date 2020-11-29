@@ -8,27 +8,39 @@
   <div class = "column1">
     <div >
   <el-radio-group v-model="tabPosition" >
-    <el-radio-button label="left">按时</el-radio-button>
-    <el-radio-button label="middle">按日</el-radio-button>
-    <el-radio-button label="right">按月</el-radio-button>
+    <el-radio-button label="按时"></el-radio-button>
+    <el-radio-button label="按日" ></el-radio-button>
+    <el-radio-button label="按月"></el-radio-button>
   </el-radio-group>
-    </div>
-   <div style="padding-top: 4px"><span class = "spans" style="padding-right: 10px" >选择开始时间</span> <input id="sdate" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',readOnly:true})" /></div>
-   <div style="padding-top: 6px"><span class = "spans" style="padding-right: 10px">选择结束时间</span> <input id="edate" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',readOnly:true,startDate:'#F{$dp.$D(\'sdate\',{d:+1})}'})" /></div>
+    </div >
+   <div v-if="tabPosition=='按时'"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            >
+   <div style="padding-top: 4px" ><span class = "spans" style="padding-right: 10px" >选择开始时间</span ><span><input id="sdate1" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日HH时',readOnly:true})" /></span></div>
+   <div style="padding-top: 6px"><span class = "spans" style="padding-right: 10px">选择结束时间</span> <span ><input id="edate1" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日HH时',readOnly:true,minDate:'#F{$dp.$D(\'sdate1\')}'})" /></span></div>
+ </div>
+ <div v-if="tabPosition=='按日'" >
+   <div style="padding-top: 4px" ><span class = "spans" style="padding-right: 10px" >选择开始时间</span ><span ><input id="sdate2"  class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日',readOnly:true})" /></span></div>
+   <div style="padding-top: 6px"><span class = "spans" style="padding-right: 10px">选择结束时间</span> <span ><input id="edate2" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日',readOnly:true,minDate:'#F{$dp.$D(\'sdate2\')}'})" /></span></div>
+ </div>
+ <div v-if="tabPosition=='按月'" >
+   <div style="padding-top: 4px" ><span class = "spans" style="padding-right: 10px" >选择开始时间</span ><span ><input id="sdate3"  class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月',readOnly:true})" /></span></div>
+   <div style="padding-top: 6px"><span class = "spans" style="padding-right: 10px">选择结束时间</span> <span><input id="edate3" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月',onpicked:function(){$dp.$('edate3_1').value=$dp.cal.getP('y年');},readOnly:true,minDate:'#F{$dp.$D(\'sdate3\')}'})" /></span></div>
+ </div>
+
    <template>
   <el-radio v-model="radio" label="1">显示全部数据</el-radio>
-  <el-radio v-model="radio" label="2">仅显示呼叫失败数据</el-radio>
+  <el-radio v-model="radio" label="2">仅显示呼叫失败数据</el-radio>e
   </template>
-   <div style="padding-top: 60px"> <el-button type="primary">分 析</el-button> <span style="padding-left: 20px"><el-button>重 置</el-button></span></div>
+   <div style="padding-top: 60px"> <el-button type="primary" @click="getEchartData()">分 析</el-button> <span style="padding-left: 15%"><el-button>重 置</el-button></span></div>
   </div>
   <div class = "column2"><el-divider id = "divider2" direction="vertical" ></el-divider></div>
-  <div class = "column7"><div ref="chart3" style="width: 1100px;height: 300px"></div></div>
+  <div class = "column7"><div ref="chart3" style="width: 1000px;height: 280px"></div></div>
 
   </el-collapse-item>
   </el-collapse>
 </template>
 
 <script>
+import axios from "axios";
 var echarts = require('echarts');
   export default {
     name:'Business',
@@ -38,20 +50,23 @@ var echarts = require('echarts');
     data() {
       return {
         busi: '1',
-        tabPosition: 'right',
-        radio: '1'
+        tabPosition: '按月',
+        radio: '1',
+        dateFormat:'',
 
       };
     },
     mounted() {
-    this.getEchartData();
+    //this.getEchartData();
   },
     methods: {
       handleChange(val) {
         console.log(val);
       },
+
       getEchartData() {
        const chart3 = this.$refs.chart3;
+
         if (chart3) {
    var myChart3 = this.$echarts.init(chart3);
    var option = {
@@ -64,19 +79,19 @@ var echarts = require('echarts');
       color:'#606266',
     },
      },
-
-
         color: ['blue'],
          tooltip: {
         trigger: 'item',
-        fontSize:'10',
-        formatter: '{a} :{c}'
+        textStyle: {
+      fontSize: 8,
+       },
+        formatter: '{b}月语音{a}:{c}次',
+        position:'top',
         },
 
       xAxis: {
-
-              name:"时间/月",
-             data: ["1","2","3","4","5","6"],
+            name:"时间/月",
+             data: [],
              axisTick: {
             show: false
           },
@@ -115,16 +130,49 @@ var echarts = require('echarts');
                 barWidth:'20%',
                    itemStyle:{
           barBorderRadius: [5, 5, 0, 0],
-           opacity : 0.5,
+           opacity : 0.7,
            emphasis: {
                     opacity : 1,
                  }
          },
-                data: [5, 20, 36, 10, 10, 20],
+                data: [],
             }],
 
    };
    myChart3.setOption(option);
+
+  axios.get('../../static/month.json').then((res) => {
+console.log(res.data.name);
+      myChart3.setOption({
+        				xAxis:{
+					data:res.data.name,
+				},
+				series:{
+					data:res.data.data,
+        },
+title:{
+  text: $dp.$('sdate3').value+'-'+$dp.$('edate3').value+'业务量数据统计'
+},
+      tooltip: {
+        formatter: function (params) {
+            var color = params.color;//图例颜色
+            var htmlStr ='<div>';
+            htmlStr += params.name ;//x轴的名称
+            htmlStr += '月语音<br><br>业务量：';
+   htmlStr += '<span style="color:'+color+';">';
+   htmlStr+=params.value ;
+    htmlStr += '</span>';
+   htmlStr+= '次';
+            htmlStr += '</div>';
+
+            return htmlStr;
+        }
+
+        },
+			});
+
+		});
+
   }
   }
     }

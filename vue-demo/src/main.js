@@ -5,6 +5,8 @@ import App from './App'
 import router from './router'
 
 import echarts from 'echarts'
+import axios from 'axios';
+Vue.prototype.$axios = axios;
 // 引用bootstrap
 import $ from 'jquery'
 import 'bootstrap/dist/css/bootstrap.min.css'
