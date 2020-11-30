@@ -30,7 +30,7 @@
   <el-radio v-model="radio" label="1">显示全部数据</el-radio>
   <el-radio v-model="radio" label="2">仅显示呼叫失败数据</el-radio>
   </template>
-   <div style="padding-top: 60px"> <el-button type="primary" @click="getEchartData()">分 析</el-button> <span style="padding-left: 15%"><el-button>重 置</el-button></span></div>
+   <div style="padding-top: 60px"> <el-button type="primary" @click="getEchartData()">分 析</el-button> <span style="padding-left: 15%" @click="clean()"><el-button>重 置</el-button></span></div>
   </div>
   <div class = "column2"><el-divider id = "divider2" direction="vertical" ></el-divider></div>
   <div class = "column7"><div ref="chart3" style="width: 1100px;height: 280px"></div></div>
@@ -63,6 +63,83 @@ var echarts = require('echarts');
       handleChange(val) {
         console.log(val);
       },
+    clean(){
+      $('#sdate3').val('');
+       $('#edate3').val('');
+     var chart3 = this.$refs.chart3;
+var myChart3 = this.$echarts.init(chart3);
+myChart3.setOption({
+   title: {
+    text: "业务量数据对比统计",
+    left: "center",
+    top: "top",
+    textStyle: {
+      fontSize: 15,
+      color:'#606266',
+    },
+     },
+        color: ['blue'],
+         tooltip: {
+        trigger: 'item',
+        textStyle: {
+      fontSize: 8,
+       },
+        formatter: '{b}月语音{a}:{c}次',
+        position:'top',
+        },
+
+      xAxis: {
+            name:"时间/月",
+             data: [],
+             axisTick: {
+            show: false
+          },
+             axisLine: {
+            show: false
+                },
+            },
+
+      yAxis: {
+              type: 'value',
+              name:"业务量/次",
+          axisLine: {
+            show: false
+                },
+          axisTick: {
+            show: false
+          },
+        gridIndex: 0,
+       splitLine: {
+             show: true,
+             lineStyle:{
+            color: ['#9a9c9e'],
+              width: 0.5,
+            type: 'dashed'
+                 }
+            },
+
+        axisLabel: {
+            textStyle: {
+                color: '#999'
+            }}
+             },
+            series: [{
+                name: '业务量',
+                type: 'bar',
+                barWidth:'20%',
+                   itemStyle:{
+          barBorderRadius: [5, 5, 0, 0],
+           opacity : 0.7,
+           emphasis: {
+                    opacity : 1,
+                 }
+         },
+                data: [],
+            }],
+
+})
+
+    },
 
       getEchartData() {
        const chart3 = this.$refs.chart3;

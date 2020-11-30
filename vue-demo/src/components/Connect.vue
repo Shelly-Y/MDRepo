@@ -69,37 +69,8 @@ var echarts = require('echarts');
       sRate:'',
       fail:'',
       fRate:'',
-     }
-
-      };
-    },
-    computed:{
-
-    },
-mounted() {
-    //this.getEchartData();
-//this.getBigObj();
-  },
-    methods: {
-      handleChange(val) {
-        console.log(val);
-      },
-     clean(){
-       Object.assign(this.$data,this.$options.data());
-
      },
-
-
-      getEchartData() {
-  let chart1 = this.$refs.chart1;
-  let chart2 = this.$refs.chart2;
-
-  let a = document.getElementById(startTime);
-  console.log(a);
-    if (chart1) {
-        var myChart1 = this.$echarts.init(chart1);
-        var myChart2 = this.$echarts.init(chart2);
-        var option1 = {
+       option1 :{
           tooltip: {
         trigger: 'none',
         fontSize:'10',
@@ -137,8 +108,8 @@ mounted() {
             ]
         }
     ]
-    };
-    var option2= {
+    },
+     option2: {
           tooltip: {
         trigger: 'none',
         fontSize:'10',
@@ -176,9 +147,46 @@ mounted() {
 
             ]
         }]
-    };
-     myChart1.setOption(option1);
-     myChart2.setOption(option2);
+    },
+
+      };
+    },
+    computed:{
+
+    },
+mounted() {
+    //this.getEchartData();
+//this.getBigObj();
+  },
+    methods: {
+      handleChange(val) {
+        console.log(val);
+      },
+     clean(){
+       Object.assign(this.$data,this.$options.data());
+    $('#startTime').val('');
+       $('#endTime').val('');
+       let chart1 = this.$refs.chart1;
+       let chart2 = this.$refs.chart2;
+        var myChart1 = this.$echarts.init(chart1);
+        var myChart2 = this.$echarts.init(chart2);
+     myChart1.setOption(this.option1);
+     myChart2.setOption(this.option2);
+     },
+
+
+      getEchartData() {
+  let chart1 = this.$refs.chart1;
+  let chart2 = this.$refs.chart2;
+
+  let a = document.getElementById(startTime);
+  console.log(a);
+    if (chart1) {
+        var myChart1 = this.$echarts.init(chart1);
+        var myChart2 = this.$echarts.init(chart2);
+
+     myChart1.setOption(this.option1);
+     myChart2.setOption(this.option2);
 
   axios.get('../../static/connect.json').then((conn) => {
      var d1=conn.data.data0;
