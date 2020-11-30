@@ -64,8 +64,6 @@ var echarts = require('echarts');
         console.log(val);
       },
     clean(){
-      $('#sdate3').val('');
-       $('#edate3').val('');
      var chart3 = this.$refs.chart3;
 var myChart3 = this.$echarts.init(chart3);
 myChart3.setOption({
@@ -221,13 +219,24 @@ myChart3.setOption({
   axios.get('../../static/month.json').then((res) => {
 console.log(res.data.name);
 let time = "";
+let tooltipPre = " ";
+let tooltipEnd = " ";
 console.log(this.tabPosition);
 if(this.tabPosition=='按时'){
   time="时间/时"
+  tooltipPre = $dp.$('sdate3').value.substring(0,$dp.$('sdate3').value.indexOf("日"));
+  tooltipPre = tooltipPre + "日";
+  tooltipEnd = "时";
 }else if(this.tabPosition=='按日'){
-  time = "时间/日"
+  time = "时间/日";
+    tooltipPre = $dp.$('sdate3').value.substring(0,$dp.$('sdate3').value.indexOf("月"));
+  tooltipPre = tooltipPre + "月";
+  tooltipEnd = "日";
 }else if(this.tabPosition=='按月'){
-  time = "时间/月"
+  time = "时间/月";
+    tooltipPre = $dp.$('sdate3').value.substring(0,$dp.$('sdate3').value.indexOf("年"));
+  tooltipPre = tooltipPre + "年";
+  tooltipEnd = "月";
 }
       myChart3.setOption({
         				xAxis:{
@@ -244,11 +253,11 @@ title:{
         formatter: function (params) {
             var color = params.color;//图例颜色
             var htmlStr ='<div>';
-            htmlStr += params.name ;//x轴的名称
-            htmlStr += '月语音<br><br>业务量：';
+            htmlStr += tooltipPre+params.name+tooltipEnd;//x轴的名称
+            htmlStr += '语音<br><br>业务量：';
    htmlStr += '<span style="color:'+color+';">';
    htmlStr+=params.value ;
-    htmlStr += '</span>';
+    htmlStr += '  </span>';
    htmlStr+= '次';
             htmlStr += '</div>';
 
@@ -290,7 +299,7 @@ title:{
 .el-radio {
     color: #606266;
     cursor: pointer;
-   margin-right: 10%;
+   margin-right: 6%;
    margin-top: 10%;
 }
 
