@@ -7,6 +7,8 @@ import router from './router'
 import echarts from 'echarts'
 import axios from 'axios';
 Vue.prototype.$axios = axios;
+
+import "babel-polyfill"
 // 引用bootstrap
 import $ from 'jquery'
 import 'bootstrap/dist/css/bootstrap.min.css'

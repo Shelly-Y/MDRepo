@@ -17,7 +17,7 @@
     <div id="echart1" ref="chart1" style="padding-top: 6px;width:130px;height:130px"></div>
     </div>
   <div class="column4">
-    <div id="head2"> 呼叫成功率分析 </div>
+    <div id="head2"> 呼叫成功率分析 <br></div>
       <div class ="talkbubble">
         系统呼叫成功总数<span style="color:blue;font-size:10%;">{{echart1.callAll}} </span>次，<br>
         主叫<span style="color:blue;">{{echart1.mainCall}} </span>次，主叫接通率<span >{{echart1.mainRate}}</span>，设备正常。<br>
@@ -44,7 +44,7 @@
 
 <script >
 import axios from 'axios';
-var echarts = require('echarts');
+let echarts = require('echarts');
 
   export default {
 
@@ -164,12 +164,12 @@ mounted() {
       },
      clean(){
        Object.assign(this.$data,this.$options.data());
-    $('#startTime').val('');
+     $('#startTime').val('');
        $('#endTime').val('');
        let chart1 = this.$refs.chart1;
        let chart2 = this.$refs.chart2;
-        var myChart1 = this.$echarts.init(chart1);
-        var myChart2 = this.$echarts.init(chart2);
+        let myChart1 = this.$echarts.init(chart1);
+        let myChart2 = this.$echarts.init(chart2);
      myChart1.setOption(this.option1);
      myChart2.setOption(this.option2);
      },
@@ -182,23 +182,23 @@ mounted() {
   let a = document.getElementById(startTime);
   console.log(a);
     if (chart1) {
-        var myChart1 = this.$echarts.init(chart1);
-        var myChart2 = this.$echarts.init(chart2);
+        let myChart1 = this.$echarts.init(chart1);
+        let myChart2 = this.$echarts.init(chart2);
 
      myChart1.setOption(this.option1);
      myChart2.setOption(this.option2);
 
   axios.get('../../static/connect.json').then((conn) => {
-     var d1=conn.data.data0;
-     var d2=conn.data.data1;
-     var datalist1=[];
-     var datalist2=[];
+     let d1=conn.data.data0;
+     let d2=conn.data.data1;
+     let datalist1=[];
+     let datalist2=[];
       this.echart1.callAll = conn.data.all0.value;
       this.echart2.tryAll = conn.data.all1.value;
 
-     for(var i=0;i<d1.length;i++){
-       var m1={};
-       var m2={};
+     for(let i=0;i<d1.length;i++){
+       let m1={};
+       let m2={};
         m1["name"]=d1[i].name;
         m2["name"]=d2[i].name;
         m1["value"]=d1[i].value;
@@ -245,8 +245,9 @@ mounted() {
     }
   }
 
-</script>
-<style type="text/css">
+</script >
+
+<style >
 #divider1{
       width: 1px;
     height: 10em;
