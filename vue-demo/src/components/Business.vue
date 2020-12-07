@@ -1,8 +1,9 @@
+
 <!-- 语音业务量展现组件 -->
 <template>
   <el-collapse v-model="busi" @change="handleChange">
   <el-collapse-item>
-    <!-- 折叠区头部 svg内加入蓝色小方块-->
+  <!-- 折叠区头部 svg内加入蓝色小方块-->
  <template slot="title"><span style="padding-right: 8px"><svg width="1em" height="1em" viewBox="0 0 18 18" class="bi bi-stop-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"/>
 </svg></span> 语音业务量展现</template>
@@ -14,20 +15,20 @@
     <el-radio-button label="按日" ></el-radio-button>
     <el-radio-button label="按月"></el-radio-button>
   </el-radio-group>
-    </div >
+  </div >
     <!-- 时间选择部分 使用插件My97TimePicker 设置只读和选择，不可输入 -->
 
-   <div v-if="tabPosition=='按时'"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            >
-   <div style="padding-top: 4px" ><span class = "spans">选择开始时间</span ><span><input id="sdate3" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日HH时',readOnly:true})" /></span></div>
-   <div style="padding-top: 6px"><span class = "spans">选择结束时间</span><span ><input id="edate3" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日HH时',readOnly:true,minDate:'#F{$dp.$D(\'sdate3\')}'})" /></span></div>
- </div>
+   <div v-if="tabPosition=='按时'">
+   <div style="padding-top: 4px"><span class = "time-pre">选择开始时间</span><span><input id="sdate3" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日HH时',readOnly:true})" /></span></div>
+   <div style="padding-top: 6px"><span class = "time-pre">选择结束时间</span><span ><input id="edate3" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日HH时',readOnly:true,minDate:'#F{$dp.$D(\'sdate3\')}'})" /></span></div>
+   </div>
  <div v-if="tabPosition=='按日'" >
-   <div style="padding-top: 4px" ><span class = "spans">选择开始时间</span ><span ><input id="sdate3"  class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日',readOnly:true})" /></span></div>
-   <div style="padding-top: 6px"><span class = "spans">选择结束时间</span><span ><input id="edate3" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日',readOnly:true,minDate:'#F{$dp.$D(\'sdate3\')}'})" /></span></div>
+   <div style="padding-top: 4px" ><span class = "time-pre">选择开始时间</span ><span ><input id="sdate3"  class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日',readOnly:true})" /></span></div>
+   <div style="padding-top: 6px"><span class = "time-pre">选择结束时间</span><span ><input id="edate3" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月d日',readOnly:true,minDate:'#F{$dp.$D(\'sdate3\')}'})" /></span></div>
  </div>
  <div v-if="tabPosition=='按月'" >
-   <div style="padding-top: 4px" ><span class = "spans">选择开始时间</span ><span ><input id="sdate3"  class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月',readOnly:true})" /></span></div>
-   <div style="padding-top: 6px"><span class = "spans">选择结束时间</span><span><input id="edate3" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月',onpicked:function(){$dp.$('edate3_1').value=$dp.cal.getP('y年');},readOnly:true,minDate:'#F{$dp.$D(\'sdate3\')}'})" /></span></div>
+   <div style="padding-top: 4px" ><span class = "time-pre">选择开始时间</span ><span ><input id="sdate3"  class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月',readOnly:true})" /></span></div>
+   <div style="padding-top: 6px"><span class = "time-pre">选择结束时间</span><span><input id="edate3" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy年M月',onpicked:function(){$dp.$('edate3_1').value=$dp.cal.getP('y年');},readOnly:true,minDate:'#F{$dp.$D(\'sdate3\')}'})" /></span></div>
  </div>
 <!-- 单选按钮，选择显示全部数据或呼叫失败数据 -->
    <div>
@@ -40,7 +41,6 @@
   <div class = "column2"><el-divider id = "divider2" direction="vertical" ></el-divider></div>
     <!-- 折叠区内容 第三列 显示数据分析图 -->
   <div class = "column7"><div ref="chart3" style="width: 1100px;height: 280px"></div></div>
-
   </el-collapse-item>
   </el-collapse>
 </template>
@@ -58,7 +58,57 @@ var echarts = require('echarts');
         tabPosition: '按月',   // 单选按钮  默认按月
         radio: '1', // 单选按钮 默认显示全部数据
         //柱状图初始化参数
-     option : {
+      };
+    },
+    mounted() {
+    //this.getEchartData();
+  },
+    methods: {
+      handleChange(val) {
+        console.log(val);
+      },
+   // 重置折叠区数据内容，时间和数据分析图
+    clean(){
+     var chart3 = this.$refs.chart3;
+     var myChart3 = this.$echarts.init(chart3);
+     myChart3.setOption({
+  //柱状图标题设置
+     title: {
+    text: $dp.$('sdate3').value+'-'+$dp.$('edate3').value+'业务量数据统计',
+    left: "center",
+    top: "top",
+    textStyle: {
+      fontSize: 15,
+      color:'#606266',
+    },
+     },
+      //X轴
+      xAxis: {
+            name:" ",
+             data: [],
+             axisTick: {
+            show: false
+          },
+             axisLine: {
+            show: false
+                },
+            },
+            series: [{
+                name: '业务量',
+                type: 'bar',
+                barWidth:'20%',
+            data: [],
+            }],
+      });
+    },
+
+    //得到柱状图方法
+     getEchartData(){
+    //初始化
+     const chart3 = this.$refs.chart3;
+     if (chart3) {
+   var myChart3 = this.$echarts.init(chart3);
+   myChart3.setOption({
   //柱状图标题设置
      title: {
     text: $dp.$('sdate3').value+'-'+$dp.$('edate3').value+'业务量数据统计',
@@ -129,32 +179,9 @@ var echarts = require('echarts');
                     opacity : 1,
                  }
          },
-                data: [],
-            }],
-      }
-      };
-    },
-    mounted() {
-    //this.getEchartData();
-  },
-    methods: {
-      handleChange(val) {
-        console.log(val);
-      },
-   // 重置折叠区数据内容，时间和数据分析图
-    clean(){
-     var chart3 = this.$refs.chart3;
-     var myChart3 = this.$echarts.init(chart3);
-     myChart3.setOption(this.option);
-    },
-    //得到柱状图方法
-     getEchartData(){
-    //初始化
-     const chart3 = this.$refs.chart3;
-     if (chart3) {
-   var myChart3 = this.$echarts.init(chart3);
-   myChart3.setOption(this.option);
-
+         data: [],
+        }],
+      });
  /**
  * 设置横坐标终点名称及提示框内容
  * 示例：
@@ -162,7 +189,7 @@ var echarts = require('echarts');
  * x轴终点： 时间/时    提示框内容拼接：XX年XX月XX日XX时业务量...
  * 效果实现方法：根据日期框输入数据裁剪XX年XX月XX日  时 ，具体时依据x轴坐标获取
  */
-  let xAxisName = "";
+  let xAxisName = " ";
   let tooltipPre = " ";
   let tooltipEnd = " ";
 console.log(this.tabPosition);
@@ -182,7 +209,6 @@ if(this.tabPosition=='按时'){
   tooltipPre = tooltipPre + "年";
   tooltipEnd = "月";
 }
-
 /**
  * 获取数据：
  * {
@@ -190,9 +216,9 @@ if(this.tabPosition=='按时'){
 "data":[55,36,79,45,79,88]   #业务量，对应的纵坐标
 }
  */
+
 axios.get('../../static/month.json').then((res) => {
 console.log(res.data.name);
-
   myChart3.setOption({
 	xAxis:{
           name:xAxisName,
@@ -223,31 +249,34 @@ console.log(res.data.name);
   }
 </script>
 
-<style >
+<style scoped>
+
+.column1 {
+  float: left;
+  width: 18%;
+  padding-bottom:1.5%
+}
+.column2 {
+  float: left;
+  width: 0.33%;
+}
 /* 柱状图 */
 .column7 {
+
   float: left;
   width: 70%;
-  padding-left:2%;
+
 }
 /* 分隔线 */
 #divider2{
       width: 1px;
     height: 20em;
 }
-/* 单选框按钮内容 */
-.el-radio-button__inner{
-  border: 1px solid white;
-  color:#54A7FF;
-  font-weight: 550;
-  padding: 10px 16px;
-    font-size: 12px;
-}
+
 /* 单选框组 */
 .el-radio-group {
     margin-left:30%;
 }
-
 /* 单选框 */
 .el-radio {
     color: #606266;
@@ -255,23 +284,8 @@ console.log(res.data.name);
    margin-right: 6%;
    margin-top: 10%;
 }
-/* 单选⚪框设置 */
-.el-radio__inner {
-    border: 1px solid #409EFF;
-    border-radius: 100%;
-    width: 12px;
-    height: 12px;
-    background-color: #FFF;
-    cursor: pointer;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    font-size: 10px;
-}
 
-/* 单选⚪框标签设置 */
-.el-radio__label{
-  font-size: 12px;
-  color:#606266;
-}
+
+
 </style>
 

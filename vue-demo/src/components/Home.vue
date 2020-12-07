@@ -1,4 +1,5 @@
 <template>
+<div>
 <el-tabs v-model="activeName" @tab-click="handleClick">
     <el-tab-pane label="语音业务质量分析" name="first">
 
@@ -13,6 +14,7 @@
 
     <el-tab-pane label="语音业务质量列表" name="second"></el-tab-pane>
   </el-tabs>
+</div>
 </template>
 
 <script>

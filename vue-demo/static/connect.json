@@ -1,10 +1,17 @@
 {
-"data0":[{"name":"主叫","value": "9548120"},
-        {"name":"被叫","value": "4109080"}],
-"data1":[
-         {"name":"呼叫成功","value":"10909200"},
-         {"name":"呼叫失败","value":"1090800"}],
-"all0":{"name":"系统呼叫成功总数","value":"13657200"},
-"all1":{"name":"系统试呼总数","value":"12000000"}
+"echart1":{
+  "callAll":"13657200",
+  "mainCall": "9548120",
+  "called": "4109080",
+  "mainRate":"69.91%",
+  "calledRate":"30.09%"
+},
+"echart2":{
+  "tryAll":"12000000",
+  "successCall":"10909200",
+  "failCall":"1090800",
+  "successRate":"90.91%",
+  "failRate":"9.09%"
+}
 }
 
